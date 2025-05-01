@@ -1,6 +1,6 @@
-# base-repo-template
+# python-cookie-cutters
 
-A base repo template for Python applications.
+Cookie Cutter Python Project.
 
 ## Prerequisites
 

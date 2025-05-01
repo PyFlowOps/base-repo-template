@@ -1,0 +1,8 @@
+[project]
+name = "Cookie Cutter Templates"
+version = "0.1.0"
+description = "Cookie Cutter templates for Python projects."
+authors = [
+    {name = "Philip De Lorenzo",email = "philip.delorenzo@gmail.com"}
+]
+readme = "README.md"
