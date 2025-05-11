@@ -18,10 +18,14 @@ def prereq() -> bool:
     ## Code to check if the prerequisites are met goes here
     _cmd = ["gh", "release", "list", "--json", "tagName"]
 
-    _r = subprocess.run(_cmd, check=True, capture_output=True)
+    try:
+        _r = subprocess.run(_cmd, check=True, capture_output=True)
+    except subprocess.CalledProcessError as e:
+        print(f"[ERROR] - Error checking for existing releases: {e}")
+        raise
 
     if _r.returncode != 0:
-        raise Exception("[ERROR] - Error checking for existing releases")
+        raise Exception(f"[ERROR] - Error checking for existing releases: {_r.returncode}")
 
     _json_data = json.loads(
         _r.stdout.decode("utf-8").strip()
