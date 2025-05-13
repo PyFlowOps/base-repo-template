@@ -4,24 +4,22 @@
 # my_target: ##@category_name sample description for my_target
 default: help
 
-.PHONY: install	setup clean help
+.PHONY: install clean help
 
 ############# Development Section #############
 install: ##@meta Installs needed prerequisites and software to develop the project
 	$(info ********** Installing Developer Tooling Prerequisites **********)
 	@bash -l scripts/install.sh -a
 	@bash -l scripts/install.sh -p
-	@bash -l -c "dev/.python/bin/python -m pip install --upgrade pip"
-	@bash -l -c "dev/.python/bin/python -m pip install -r requirements.txt"
+	@bash -l -c ".python/bin/python -m pip install --upgrade pip"
+	@bash -l -c ".python/bin/python -m pip install -r requirements.txt"
 	@asdf reshim
+	@echo "[INFO] - You can now install the Cookie Cutter templates to your machine"
 	@echo "[INFO] - Installation Complete!"
-	@echo "[INFO] - You can now install the Cookie Cutter templates to your machine..."
-	@echo "" 
 
-setup: ##@meta Sets up the project
+setup-app: ##@meta Sets up the application for development
 	$(info ********** Setting up ${service_title} **********)
-	@bash -l "scripts/set-env.sh"
-	@echo "[INFO] - Project setup complete!"
+	@bash -l scripts/setup-app.sh
 
 clean: ##@meta Cleans the project
 	$(info ********** Cleaning ${service_title} **********)
