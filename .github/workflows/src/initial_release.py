@@ -25,7 +25,7 @@ def prereq() -> bool:
         raise
 
     if _r.returncode != 0:
-        raise Exception(f"[ERROR] - Error checking for existing releases: {_r.returncode}")
+        raise Exception(f"[ERROR] - Error checking for existing releases: {_r.returncode} - {_r.stderr}")
 
     _json_data = json.loads(
         _r.stdout.decode("utf-8").strip()
