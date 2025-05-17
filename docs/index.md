@@ -8,7 +8,7 @@ with settings, some CI/CD, checks, etc. already setup.
 `asdf` is used in this repo for virtual environments. Think pyenv, but
 for everything. 
 
-More information on [asdf](https://asdf-vm.com/)
+More information on [asdf](https://asdf-vm.com/){target="_blank"}
 
 ## Development
 
