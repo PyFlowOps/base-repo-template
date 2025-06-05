@@ -6,6 +6,18 @@ default: help
 
 .PHONY: install clean help
 
+# If you have DOPPLER_TOKEN set in your environment, this codebase will attempt to use it.
+# If you don't want to use it, make sure to unset it before running make commands.
+# Variables
+#$(shell _DT='${DOPPLER_TOKEN}'; echo "$${_DT}")
+PYTHON := .python/bin/python
+PACKAGE_NAME := $(shell ${PYTHON} scripts/get_project_directory.py)
+SERVICE_NAME := ${PACKAGE_NAME}
+DOPPLER_PROJECT := ${DOPPLER_PROJECT}
+DOPPLER_CONFIG := ${DOPPLER_CONFIG}
+PORT := 8080
+.EXPORT_ALL_VARIABLES:
+
 ############# Development Section #############
 install: ##@meta Installs needed prerequisites and software to develop the project
 	$(info ********** Installing Developer Tooling Prerequisites **********)
@@ -21,23 +33,21 @@ setup: ##@meta Sets up the application for development
 	$(info ********** Setting up ${service_title} **********)
 	@bash -l scripts/setup-app.sh
 
-run: ##@run Run the Service Locally
+run: ##@local Run the Service Locally
 	$(info ********** Building Local ${SERVICE_TITLE} **********)
-	@doppler run --project ${DOPPLER_PROJECT} --config ${DOPPLER_CONFIG} --token ${_DOPPLER_TOKEN} --command "./.python/bin/python -m poetry run uvicorn ${PACKAGE_NAME}:app --host 0.0.0.0 --port ${PORT} --reload"
+	@bash scripts/entrypoint.sh -r
 
-terminal: ##@run Run the Python REPL Locally
-	@doppler run --project ${DOPPLER_PROJECT} --config ${DOPPLER_CONFIG} --token ${_DOPPLER_TOKEN} --command "./.python/bin/python -m poetry run python"
+terminal: ##@local Run the Python REPL Locally
+	@bash scripts/entrypoint.sh -t
 
-build-docker: ##@build Build Docker Image (Local - Cloud Run Image)
+build: ##@docker Build Docker Image (Local - Cloud Run Image)
 	$(info ********** Building Local ${SERVICE_TITLE} Docker Image **********)
-	@make build
-	@if [[ -z "${_DOPPLER_TOKEN}" ]]; then echo "[ERROR] - DOPPLER_TOKEN is not set. Please set the DOPPLER_TOKEN environment variable." && exit 1; fi
-	@docker build --build-arg="SERVICE_NAME=${SERVICE_NAME}" --build-arg="DOPPLER_PROJECT=${DOPPLER_PROJECT}" --build-arg="DOPPLER_CONFIG=${DOPPLER_CONFIG}" --build-arg="DOPPLER_TOKEN=${DOPPLER_TOKEN}" -t ${SERVICE_NAME}:local --file Dockerfile .
+	@bash scripts/entrypoint.sh -b
 
-run-docker: ##@run Run Docker Image (Local - Cloud Run Image)
+start: ##@docker Run Docker Image (Local - Cloud Run Image)
 	$(info ********** Running Local ${SERVICE_TITLE} Docker Image **********)
 	@if [[ -z "$(docker image list | grep "${SERVICE_NAME}")" ]]; then echo "[ERROR] - Please run 'make build-docker' to build the Docker image." && exit 1; fi
-	@docker run -p 8080:8080/tcp -it --rm --name ${SERVICE_NAME} ${SERVICE_NAME}:local
+	@bash scripts/entrypoint.sh -s
 
 clean: ##@meta Cleans the project
 	$(info ********** Cleaning ${service_title} **********)
