@@ -12,6 +12,7 @@ default: help
 #$(shell _DT='${DOPPLER_TOKEN}'; echo "$${_DT}")
 PYTHON := .python/bin/python
 PACKAGE_NAME := $(shell ${PYTHON} scripts/get_project_directory.py)
+PACKAGE_TYPE := $(shell ${PYTHON} scripts/get_app_type.py)
 SERVICE_NAME := ${PACKAGE_NAME}
 DOPPLER_PROJECT := ${DOPPLER_PROJECT}
 DOPPLER_CONFIG := ${DOPPLER_CONFIG}
@@ -31,10 +32,12 @@ install: ##@meta Installs needed prerequisites and software to develop the proje
 
 setup: ##@meta Sets up the application for development
 	$(info ********** Setting up ${service_title} **********)
+	@if [ ! -d .python ]; then echo "[ERROR] - Please install Python from the Makefile in root - run 'make install'"; exit 0; fi
 	@bash -l scripts/setup-app.sh
 
 run: ##@local Run the Service Locally
 	$(info ********** Building Local ${SERVICE_TITLE} **********)
+	@if [ ! -d .python ]; then echo "[ERROR] - Please install Python from the Makefile in root - run 'make install'"; exit 0; fi
 	@bash scripts/entrypoint.sh -r
 
 terminal: ##@local Run the Python REPL Locally
@@ -54,6 +57,22 @@ clean: ##@meta Cleans the project
 	@rm -rf ./dev
 	@rm -rf .pytest_cache
 	@if [ -d ${HOME}/Library/Caches/pypoetry/virtualenvs ]; then rm -rf ${HOME}/Library/Caches/pypoetry/virtualenvs/${service}-*; fi
+
+.PHONY: isort format
+isort: ##@code Running isort on the project
+	$(info ********** Decrypting Configuration File **********)
+	@if [ ! -d ../.python ]; then echo "Please install Python from the Makefile in root - run 'make install'"; exit 0; fi
+	@bash -l -c ".python/bin/python -m isort ."
+
+format: ##@code Running black on the project
+	$(info ********** Running Black on the project **********)
+	@if [ ! -d ../.python ]; then echo "Please install Python from the Makefile in root - run 'make install'"; exit 0; fi
+	@bash -l -c "./../.python/bin/python -m black ."
+
+.PHONY: create-db
+create-db: ##@code Running black on the project
+	$(info ********** Creating ${service_title} Database/Tables **********)
+	@bash scripts/build_sqlite_database.sh
 
 help: ##@misc Show this help.
 	@echo $(MAKEFILE_LIST)
