@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 /dev
 /delete
+**/production.txt
 
 # C extensions
 *.so

@@ -27,6 +27,8 @@ install: ##@meta Installs needed prerequisites and software to develop the proje
 	@bash -l -c ".python/bin/python -m pip install --upgrade pip"
 	@bash -l -c ".python/bin/python -m pip install -r requirements.txt"
 	@asdf reshim
+	@echo "[INFO] - Exporting Poetry requirements..."
+	@if [[ -f ${PACKAGE_NAME}/scripts/requirements.sh ]]; then bash -l ${PACKAGE_NAME}/scripts/requirements.sh; fi
 	@echo "[INFO] - You can now install the Cookie Cutter templates to your machine"
 	@echo "[INFO] - Installation Complete!"
 
