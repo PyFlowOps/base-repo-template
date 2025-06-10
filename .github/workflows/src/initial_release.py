@@ -1,4 +1,6 @@
+# This file will run an initial release on a Github repository using the GitHub CLI, if there isn't one that already exists.
 # Author: Philip De Lorenzo <philip.delorenzo@gmail.com>
+# Copyright (c) 2025 PyFlowOps
 import json
 import subprocess
 
@@ -48,10 +50,10 @@ def create_initial_release():
         "create",
         "v0.0.0",
         "--title",
-        "Initial Release",
+        "Automated Initial Release",
         "--notes",
-        "Initial release of the project.",
-        "--draft",
+        "Automated Initial release of the project.",
+        "--latest" # Change this to "--draft" if you want to create a draft release
     ]
 
     # If the prereq() returns False, then the release already exists

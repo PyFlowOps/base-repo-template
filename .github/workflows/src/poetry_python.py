@@ -7,6 +7,7 @@ import os
 
 import pytoml
 from icecream import ic
+from loguru import logger
 from pythonjsonlogger.json import JsonFormatter
 
 # Basic configuration for logging
@@ -15,13 +16,13 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",  # Define log message format
 )
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+json_logger = logging.getLogger(__name__)
+json_logger.setLevel(logging.INFO)
 
 handler = logging.StreamHandler()
 handler.setFormatter(JsonFormatter())
 
-logger.addHandler(handler)
+json_logger.addHandler(handler)
 # End of basic configuration for logging
 
 parser = argparse.ArgumentParser(description="Get the versions for the project.")

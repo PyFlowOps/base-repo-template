@@ -5,9 +5,14 @@ on:
         description: 'The draft release version'
         value: ${{ jobs.versions.outputs.draft_version }}
 
+    secrets:
+      GH_TOKEN:
+        description: 'GitHub Token for authentication'
+        required: true
+
 jobs:
   versions:
-    name: TOML Version
+    name: Draft Release Version (from Package Version)
     runs-on: 'ubuntu-latest'
     outputs:
       draft_version: ${{ steps.draft-version.outputs.draft_version }}
@@ -20,14 +25,14 @@ jobs:
         with:
           python-version: 3.12.6
   
-      - name: Install PyTOML
+      - name: Install Requirements
         run: pip install -r  ${{ github.workspace }}/.github/workflows/src/requirements.txt
         shell: bash
 
       - name: Draft Release Version
         id: draft-version
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           #!/bin/bash
           echo "Getting draft release version"
