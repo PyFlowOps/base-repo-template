@@ -15,6 +15,14 @@ on:
         description: 'The latest version (Draft Release)'
         value: ${{ jobs.versions.outputs.draft_version }}
 
+    secrets:
+      GITHUB_TOKEN:
+        description: 'GitHub Token for authentication'
+        required: true
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   versions:
     name: Project Versions
