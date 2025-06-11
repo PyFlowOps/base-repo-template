@@ -42,9 +42,6 @@ def get_all_releases() -> list[dict]:
     if type(_data) != list:
         raise Exception("[ERROR] - Expected a list of releases")
 
-    if len(_data) > 1:
-        raise Exception("[ERROR] - More than one draft release found")
-
     return _data
 
 
@@ -133,9 +130,9 @@ def promote_draft():
         "--latest=false",
     ]
     print("[INFO] - Promoting draft release to pre-release")
-    # r = subprocess.run(_cmd, capture_output=True, text=True)
-    # if r.returncode != 0:
-    #    raise Exception(f"Error: {r.stderr}")
+    r = subprocess.run(_cmd, capture_output=True, text=True)
+    if r.returncode != 0:
+        raise Exception(f"Error: {r.stderr}")
 
 
 def promote_release():
@@ -154,13 +151,13 @@ def promote_release():
         "edit",
         _prerelease["tagName"],
         "--draft=false",
-        "--prerelease=true",
-        "--latest=false",
+        "--prerelease=false",
+        "--latest=true",
     ]
     print("[INFO] - Promoting pre-release to full release")
-    # r = subprocess.run(_cmd, capture_output=True, text=True)
-    # if r.returncode != 0:
-    #    raise Exception(f"Error: {r.stderr}")
+    r = subprocess.run(_cmd, capture_output=True, text=True)
+    if r.returncode != 0:
+       raise Exception(f"Error: {r.stderr}")
 
 
 if __name__ == "__main__":
