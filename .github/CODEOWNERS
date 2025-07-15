@@ -1,0 +1,6 @@
+# This is the codeowners file for the project
+.github/CODEOWNERS  @philipdelorenzo
+
+# PFO Team
+.github/workflows/**   @philipdelorenzo
+.github/actions/**   @philipdelorenzo
